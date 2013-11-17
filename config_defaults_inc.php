@@ -250,7 +250,7 @@
 	 * @see $g_send_reset_password
 	 * @global int $g_allow_signup
 	 */
-	$g_allow_signup			= ON;
+	$g_allow_signup			= OFF;
 
 	/**
 	 * Max. attempts to login using a wrong password before lock the account.
@@ -274,7 +274,7 @@
 	 * creating new accounts, and the password will be set to blank when reset.
 	 * @global int $g_send_reset_password
 	 */
-	$g_send_reset_password	= ON;
+	$g_send_reset_password	= OFF;
 
 	/**
 	 * String used to generate the confirm_hash for the 'lost password' feature and captcha code for 'signup'
@@ -288,7 +288,7 @@
 	 * use captcha image to validate subscription it requires GD library installed
 	 * @global int $g_signup_use_captcha
 	 */
-	$g_signup_use_captcha	= ON;
+	$g_signup_use_captcha	= OFF;
 
 	/**
 	 * absolute path (with trailing slash!) to folder which contains your TrueType-Font files
@@ -308,7 +308,7 @@
 	 * Setting to disable the 'lost your password' feature.
 	 * @global int $g_lost_password_feature
 	 */
-	$g_lost_password_feature = ON;
+	$g_lost_password_feature = OFF;
 
 	/**
 	 * Max. simultaneous requests of 'lost password'

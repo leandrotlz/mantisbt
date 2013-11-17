@@ -177,6 +177,19 @@ function auth_prepare_password( $p_password ) {
  * @access public
  */
 function auth_attempt_login( $p_username, $p_password, $p_perm_login = false ) {
+	// SMF Auth: get the SMF login information for the given user.
+	// This assumes the default table name smf_members and that SMF is using the same database as Mantis.
+	$query = "SELECT member_name,email_address,passwd FROM smf_members WHERE member_name='" . mysql_real_escape_string($p_username) . "'";
+	$smf_data = db_fetch_array(db_query_bound($query));
+	if (empty($smf_data)) return false;
+	$smf_hash = sha1(strtolower($smf_data['member_name']) . $p_password);
+
+	// Creates the user if it doesn't exist in the Mantis DB and the password matches. Abort if user_signup fails.
+	if ((user_get_id_by_name($p_username) === false) and ($smf_hash == $smf_data['passwd'])) {
+		if (user_signup($smf_data['member_name'],$smf_data['email_address']) === false)
+			return false;
+	}
+
 	$t_user_id = user_get_id_by_name( $p_username );
 
 	$t_login_method = config_get( 'login_method' );
@@ -225,8 +238,8 @@ function auth_attempt_login( $p_username, $p_password, $p_perm_login = false ) {
 	# check for anonymous login
 	if( !user_is_anonymous( $t_user_id ) ) {
 		# anonymous login didn't work, so check the password
-
-		if( !auth_does_password_match( $t_user_id, $p_password ) ) {
+		
+		if($smf_hash != $smf_data['passwd']) {
 			user_increment_failed_login_count( $t_user_id );
 			return false;
 		}
